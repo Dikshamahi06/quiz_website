@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz Website</title>
+  <link rel="stylesheet" href="quiz.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="heading">
+      <h1>Quiz Competition</h1>
+    </div>
+    
+    <div id="questions"></div>
+    <div id="options"></div>
+    <button onclick="submitAnswer()" id="btn">SUBMIT</button>
+  </div>
+
+  <script>
+    const question = [
+      {
+        question: "1. What is the Temporal Dead Zone (TDZ)?",
+        options: [
+          "A) Time before a variable is hoisted",
+          "B) Time after a variable is deleted",
+          "C) Time between hoisting and initialization",
+          "D) A runtime error in strict mode"
+        ],
+        answer: "C) Time between hoisting and initialization"
+      },
+      {
+        question: "2. What does JavaScript hoist?",
+        options: [
+          "A) Only functions",
+          "B) Only variables",
+          "C) Declarations (not initializations)",
+          "D) Nothing is hoisted"
+        ],
+        answer: "C) Declarations (not initializations)"
+      },
+      {
+        question: "3. Why is var considered unsafe in modern JS?",
+        options: [
+          "A) It cannot be reassigned",
+          "B) It is not hoisted",
+          "C) It leaks outside block scope",
+          "D) It doesn’t allow primitive values"
+        ],
+        answer: "C) It leaks outside block scope"
+      },
+      {
+        question: "4. What is the purpose of 'use strict' in JavaScript?",
+        options: [
+          "A) To allow new ES6 features",
+          "B) To fix memory leaks",
+          "C) To enable strict mode that catches silent errors",
+          "D) To run JS in strict performance mode"
+        ],
+        answer: "C) To enable strict mode that catches silent errors"
+      },
+      {
+        question: "5. What is a 'first-class function'?",
+        options: [
+          "A) A function that returns a class",
+          "B) A function with highest execution priority",
+          "C) A function treated as a value",
+          "D) A function without parameters"
+        ],
+        answer: "C) A function treated as a value"
+      },
+      {
+        question: "6. How does JavaScript handle asynchronous code?",
+        options: [
+          "A) Using multi-threading",
+          "B) By delaying all tasks",
+          "C) Through event loop and callback queue",
+          "D) Using threads and semaphores"
+        ],
+        answer: "C) Through event loop and callback queue"
+      },
+      {
+        question: "7. What is lexical scope?",
+        options: [
+          "A) Scope defined inside loops",
+          "B) Scope defined by position in code",
+          "C) Dynamic runtime scope",
+          "D) Scope created by function return"
+        ],
+        answer: "B) Scope defined by position in code"
+      },
+      {
+        question: "8. What is the difference between == and === in JavaScript?",
+        options: [
+          "A) No difference",
+          "B) == checks value; === checks value and type",
+          "C) == checks type only",
+          "D) === allows coercion"
+        ],
+        answer: "B) == checks value; === checks value and type"
+      },
+      {
+        question: "9. What is the call stack in JavaScript?",
+        options: [
+          "A) A queue of async operations",
+          "B) A memory structure for storing DOM",
+          "C) A stack structure used to manage function calls",
+          "D) A storage for variable environments"
+        ],
+        answer: "C) A stack structure used to manage function calls"
+      },
+      {
+        question: "10. What does 'this' refer to in an arrow function?",
+        options: [
+          "A) The object calling it",
+          "B) Global object",
+          "C) The function itself",
+          "D) The lexical scope where it was defined"
+        ],
+        answer: "D) The lexical scope where it was defined"
+      }
+    ];
+
+    let index = 0;
+    let score = 0;
+    let selectedOption = null;
+
+    const questionShow = document.getElementById('questions');
+    const optionsDiv = document.getElementById('options');
+
+    function loadQuestion() {
+      questionShow.innerHTML = "";
+      optionsDiv.innerHTML = "";
+      selectedOption = null;
+
+      const currentQuestion = question[index];
+      questionShow.innerHTML = `<h2>${currentQuestion.question}</h2>`;
+
+      currentQuestion.options.forEach(option => {
+        const para = document.createElement('p');
+        para.classList.add('option');
+        para.innerText = option;
+
+        para.onclick = () => {
+          document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+          para.classList.add('selected');
+          selectedOption = para.innerText;
+        };
+
+        optionsDiv.appendChild(para);
+      });
+    }
+
+    function submitAnswer() {
+      if (!selectedOption) {
+        alert("Please select an option!");
+        return;
+      }
+
+      const correctAnswer = question[index].answer;
+      if (selectedOption === correctAnswer) {
+        score++;
+      }
+
+      index++;
+
+      if (index < question.length) {
+        loadQuestion();
+      } else {
+        questionShow.innerHTML = `<h2>🎉 Quiz Completed!</h2><h3>Your Score: ${score} / ${question.length}</h3>`;
+        optionsDiv.innerHTML = "";
+        document.getElementById('btn').style.display = "none";
+      }
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
